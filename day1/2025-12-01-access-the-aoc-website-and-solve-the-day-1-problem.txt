@@ -1,0 +1,243 @@
+
+ ▐▛███▜▌   Claude Code v2.0.55
+▝▜█████▛▘  Opus 4.5 · Claude Max
+  ▘▘ ▝▝    ~/dev/aoc2025
+
+> Access the aoc website and solve the day 1 problem. 
+  ⎿  UserPromptSubmit hook error
+
+● I'll help you solve the Advent of Code 2025 Day 1 problem. Let me start by
+   exploring the current project structure and getting the authentication
+  details.
+
+● Search(pattern: "**/*")
+  ⎿  Found 32 files (ctrl+o to expand)
+
+● Read(.env)
+  ⎿  Read 2 lines
+
+● Good, I have the session cookie. Now let me fetch the Day 1 problem from
+  the Advent of Code website.
+
+● Fetch(https://adventofcode.com/2025/day/1)
+  ⎿  Received 8KB (200 OK)
+
+● Now I understand the problem. Let me fetch the actual puzzle input.
+
+● Bash(curl -s -b
+      "session=snip
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿  R8                              
+     R28
+     R43
+     … +4528 lines (ctrl+o to expand)
+
+● I have the problem and input. Let me create the solution.
+
+● Bash(mkdir -p /home/pmatos/dev/aoc2025/day1)
+  ⎿  (No content)
+
+● Bash(uv init --no-readme 2>/dev/null || true && ls -la)
+  ⎿  total 60                                           
+     drwxr-xr-x   4 pmatos pmatos  4096  1. Dez 08:49 .
+     drwxrwxr-x 436 pmatos pmatos 20480  1. Dez 08:37 ..
+     … +9 lines (ctrl+o to expand)
+
+● Bash(uv add pyright)
+  ⎿  Using CPython 3.12.7                  
+     Creating virtual environment at: .venv
+     Resolved 4 packages in 275ms
+     … +7 lines (ctrl+o to expand)
+
+● Bash(curl -s -b
+      "session=snip
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿  (No content)
+
+● Write(day1/problem.py)
+  ⎿  Wrote 38 lines to day1/problem.py              
+     #!/usr/bin/env python3
+     import sys
+     def solve(input_text: str) -> int:
+         position = 50
+         count = 0
+         for line in input_text.strip().split('\n'):
+             direction = line[0]
+     … +28 lines (ctrl+o to expand)
+
+● Write(day1/test_example.txt)
+  ⎿  Wrote 11 lines to day1/test_example.txt
+     L68
+     L30
+     R48
+     L5
+     R60
+     L55
+     L1
+     L99
+     R14
+     L82
+     … +1 line (ctrl+o to expand)
+
+● Bash(uv run python day1/problem.py day1/test_example.txt)
+  ⎿  3
+
+● The example passes (expected: 3, got: 3). Let me run it on the actual
+  input.
+
+● Bash(uv run python day1/problem.py day1/input.txt)
+  ⎿  1123
+
+● Bash(uv run pyright day1/problem.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Bash(curl -s -X POST -b
+      "session=snip
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3" -d…)
+  ⎿  <!DOCTYPE html>                
+     <html lang="en-us">
+     <head>
+     … +151 lines (ctrl+o to expand)
+
+● Part 1 is correct! The answer 1123 earned one gold star. Now let me get
+  Part 2 of the puzzle.
+
+● Fetch(https://adventofcode.com/2025/day/1)
+  ⎿  Received 8KB (200 OK)
+
+● Bash(curl -s -b
+      "session=snip
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿ <article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>You're
+     sure that's the right password, but the door won't open. You knock, bu
+    t nobody answers. You build a snowman while you think.</p>
+    … +87 lines (ctrl+o to expand)
+
+
+
+● I understand Part 2! Now I need to count every time the dial passes
+  through 0 (including during rotations), not just when it ends at 0. Let me
+   update the solution.
+
+● Read(day1/problem.py)
+  ⎿  Read 38 lines
+
+● Write(day1/problem.py)
+  ⎿  Updated day1/problem.py with 38 additions and 4 removals          
+        2    import sys
+        3    
+        4    
+        5 -  def solve(input_text: str) -> int:
+        5 +  def count_zeros_left(start: int, distance: int) -> int:
+        6 +      first_k = start if start > 0 else 100
+        7 +      if first_k > distance:
+        8 +          return 0
+        9 +      return (distance - first_k) // 100 + 1
+       10 +  
+       11 +  
+       12 +  def count_zeros_right(start: int, distance: int) -> int:
+       13 +      first_k = (100 - start) % 100
+       14 +      if first_k == 0:
+       15 +          first_k = 100
+       16 +      if first_k > distance:
+       17 +          return 0
+       18 +      return (distance - first_k) // 100 + 1
+       19 +  
+       20 +  
+       21 +  def solve_part1(input_text: str) -> int:
+       22        position = 50
+       23        count = 0
+       24    
+     ...
+       12    
+       13            if direction == 'L':
+       14                position = (position - distance) % 100
+       15 -          else:  # R
+       15 +          else:
+       16                position = (position + distance) % 100
+       17    
+       18            if position == 0:
+     ...
+       21        return count
+       22    
+       23    
+       24 +  def solve_part2(input_text: str) -> int:
+       25 +      position = 50
+       26 +      count = 0
+       27 +  
+       28 +      for line in input_text.strip().split('\n'):
+       29 +          direction = line[0]
+       30 +          distance = int(line[1:])
+       31 +  
+       32 +          if direction == 'L':
+       33 +              count += count_zeros_left(position, distance)
+       34 +              position = (position - distance) % 100
+       35 +          else:
+       36 +              count += count_zeros_right(position, distance)
+       37 +              position = (position + distance) % 100
+       38 +  
+       39 +      return count
+       40 +  
+       41 +  
+       42    def main() -> None:
+       43        if len(sys.argv) < 2:
+       44            print("Usage: python problem.py <input_file>", 
+            file=sys.stderr)
+     ...
+       29        with open(sys.argv[1], 'r') as f:
+       30            input_text = f.read()
+       31    
+       32 -      result = solve(input_text)
+       33 -      print(result)
+       32 +      print(solve_part1(input_text))
+       33 +      print(solve_part2(input_text))
+       34    
+       35    
+       36    if __name__ == "__main__":
+
+● Bash(uv run python day1/problem.py day1/test_example.txt)
+  ⎿  3
+     6
+
+● Both examples pass (Part 1: 3, Part 2: 6). Let me run pyright and then get
+   the Part 2 answer.
+
+● Bash(uv run pyright day1/problem.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Bash(uv run python day1/problem.py day1/input.txt)
+  ⎿  1123
+     6695
+
+● Bash(curl -s -X POST -b
+      "session=snip
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3" -d…)
+  ⎿  <!DOCTYPE html>                
+     <html lang="en-us">
+     <head>
+     … +167 lines (ctrl+o to expand)
+
+● Day 1 is complete! Both parts solved successfully.
+
+● Bash(rm /home/pmatos/dev/aoc2025/day1/test_example.txt)
+  ⎿  (No content)
+
+● Day 1 Complete - "Secret Entrance"
+
+  Part 1: Count how many times the dial ends at 0 after each rotation.
+  - Answer: 1123
+
+  Part 2: Count every time the dial passes through 0 (during or at the end
+  of rotations).
+  - Answer: 6695
+
+  Both solutions are in day1/problem.py. The solution uses modular
+  arithmetic to track the dial position (0-99) and calculates zero crossings
+   during rotations by determining how many complete cycles plus partial
+  cycles pass through position 0.
+
+
+
