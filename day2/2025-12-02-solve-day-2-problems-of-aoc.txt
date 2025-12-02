@@ -1,0 +1,233 @@
+
+ ▐▛███▜▌   Claude Code v2.0.56
+▝▜█████▛▘  Opus 4.5 · Claude Max
+  ▘▘ ▝▝    ~/dev/aoc2025
+
+> Solve day 2 problems of AOC. 
+
+● Let me fetch the correct problem from AoC 2025.
+
+● firecrawl - firecrawl_scrape (MCP)(url: "https://adventofcode.com/2025/day/2",
+                                     formats: ["markdown"])
+  ⎿ ## \-\-\- Day 2: Gift Shop ---                                         
+
+    You get inside and take the elevator to its only other stop: the gift s
+    … +60 lines (ctrl+o to expand)
+
+
+● Read(day1/problem.py)
+  ⎿  Read 72 lines
+
+● Bash(mkdir -p /home/steamvr/dev/aoc2025/day2)
+  ⎿  (No content)
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f93cfe221829f25e9ae4ac41fd4d7d518a46ca0f4336c2ed34
+      b0ca42be37f2367c2b6288a080c810a49e111971f0748688903174193dcb47d"
+      https://ad…)
+  ⎿ 18623-26004,226779-293422,65855-88510,868-1423,248115026-248337139,9039
+    11-926580,97-121,67636417-67796062,24-47,6968-10197,193-242,3769-5052,5
+    140337-5233474,2894097247-2894150301,979582-1016336,502-646,9132195-919
+    … +3 lines (ctrl+o to expand)
+
+
+
+
+● Write(day2/input.txt)
+  ⎿  Wrote 2 lines to day2/input.txt                                       
+     18623-26004,226779-293422,65855-88510,868-1423,248115026-248337139,9039
+     11-926580,97-121,67636417-67796062,24-47,6968-10197,193-242,3769-5052,5
+     140337-5233474,2894097247-2894150301,979582-1016336,502-646,9132195-919
+     1022,266-378,58-91,736828-868857,622792-694076,6767592127-6767717303,29
+     20-3656,8811329-8931031,107384-147042,941220-969217,3-17,360063-562672,
+     7979763615-7979843972,1890-2660,23170346-23308802
+
+● Write(day2/problem.py)
+  ⎿  Wrote 88 lines to day2/problem.py                                    
+     #!/usr/bin/env python3
+     import sys
+     def is_invalid_id(n: int) -> bool:
+         """Check if a number is an invalid ID (digits repeated twice)."""
+         s = str(n)
+         if len(s) % 2 != 0:
+             return False
+         half = len(s) // 2
+     … +78 lines (ctrl+o to expand)
+
+● Let me verify with the example from the problem first:
+
+● Bash(cd /home/steamvr/dev/aoc2025/day2 && echo
+      '11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528
+      ,446443-446449,38593856-38593862,565653-5656…)
+  ⎿  1227775554
+
+● Example passes. Now let me run it on the actual input and check types:
+
+● Bash(python3 problem.py input.txt)
+  ⎿  19386344315
+     0
+
+● Bash(cd /home/steamvr/dev/aoc2025 && pyright day2/problem.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Part 1 answer: 19386344315. Let me submit it to get Part 2:
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f93cfe221829f25e9ae4ac41fd4d7d518a46ca0f4336c2ed34
+      b0ca42be37f2367c2b6288a080c810a49e111971f0748688903174193dcb47d" -X POST
+      -d…)
+  ⎿ That's the right answer!  You are one gold star closer to decorating th
+    e North Pole. [Continue to Part Two]
+
+
+● Part 1 correct! Let me get Part 2:
+
+● firecrawl - firecrawl_scrape (MCP)(url: "https://adventofcode.com/2025/day/2",
+                                     formats: ["markdown"], maxAge: 0)
+  ⎿  Error: connect ECONNREFUSED 35.245.250.27:443
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f93cfe221829f25e9ae4ac41fd4d7d518a46ca0f4336c2ed34
+      b0ca42be37f2367c2b6288a080c810a49e111971f0748688903174193dcb47d"
+      https://ad…)
+  ⎿  (No content)
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f93cfe221829f25e9ae4ac41fd4d7d518a46ca0f4336c2ed34
+      b0ca42be37f2367c2b6288a080c810a49e111971f0748688903174193dcb47d"
+      https://ad…)
+  ⎿ --- Article 1 ---                                                      
+    --- Day 2: Gift Shop ---You get inside and take the elevator to its onl
+    y other stop: the gift shop. "Thank you for visiting the North Pole!" g
+    … +67 lines (ctrl+o to expand)
+
+
+
+● Part 2: IDs are now invalid if made of a sequence repeated at least twice
+  (not just exactly twice). Let me update the solution:
+
+● Read(day2/problem.py)
+  ⎿  Read 88 lines
+
+● Update(day2/problem.py)
+  ⎿  Updated day2/problem.py with 59 additions and 2 removals           
+        66        return total
+        67    
+        68    
+        69 +  def generate_invalid_ids_part2_in_range(start: int, end: 
+           + int) -> set[int]:
+        70 +      """Generate all invalid IDs (repeated at least twice) 
+           + in range [start, end]."""
+        71 +      invalid_ids: set[int] = set()
+        72 +  
+        73 +      # For pattern length n and repetition count k >= 2
+        74 +      # Total length L = n * k
+        75 +      # Multiplier M = (10^(n*k) - 1) / (10^n - 1)
+        76 +  
+        77 +      n = 1
+        78 +      while True:
+        79 +          base_min = 10**(n-1) if n > 1 else 1
+        80 +          base_max = 10**n - 1
+        81 +  
+        82 +          # Smallest possible ID with pattern length n is 
+           + base_min repeated twice
+        83 +          # Multiplier for k=2 is 10^n + 1
+        84 +          smallest_id = base_min * (10**n + 1)
+        85 +          if smallest_id > end:
+        86 +              break
+        87 +  
+        88 +          k = 2
+        89 +          while True:
+        90 +              total_len = n * k
+        91 +              # Multiplier = (10^(n*k) - 1) / (10^n - 1)
+        92 +              multiplier = (10**(n*k) - 1) // (10**n - 1)
+        93 +  
+        94 +              min_id = base_min * multiplier
+        95 +              max_id = base_max * multiplier
+        96 +  
+        97 +              if min_id > end:
+        98 +                  break
+        99 +  
+       100 +              x_start = max(base_min, (start + multiplier - 
+           + 1) // multiplier)
+       101 +              x_end = min(base_max, end // multiplier)
+       102 +  
+       103 +              for x in range(x_start, x_end + 1):
+       104 +                  invalid_id = x * multiplier
+       105 +                  if start <= invalid_id <= end:
+       106 +                      invalid_ids.add(invalid_id)
+       107 +  
+       108 +              k += 1
+       109 +  
+       110 +          n += 1
+       111 +  
+       112 +      return invalid_ids
+       113 +  
+       114 +  
+       115    def solve_part2(input_text: str) -> int:
+       116 -      # Placeholder for Part 2
+       117 -      return 0
+       116 +      """Find and sum all invalid IDs (repeated at least 
+           + twice) in the given ranges."""
+       117 +      line = input_text.strip()
+       118 +      ranges = line.split(',')
+       119    
+       120 +      total = 0
+       121 +      for r in ranges:
+       122 +          parts = r.split('-')
+       123 +          start = int(parts[0])
+       124 +          end = int(parts[1])
+       125 +          invalid_ids = 
+           + generate_invalid_ids_part2_in_range(start, end)
+       126 +          total += sum(invalid_ids)
+       127    
+       128 +      return total
+       129 +  
+       130 +  
+       131    def main() -> None:
+       132        if len(sys.argv) < 2:
+       133            print("Usage: python problem.py <input_file>", 
+             file=sys.stderr)
+
+● Bash(cd /home/steamvr/dev/aoc2025/day2 && echo
+      '11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528
+      ,446443-446449,38593856-38593862,565653-5656…)
+  ⎿  4174379265
+
+● Part 2 example passes. Now running on actual input:
+
+● Bash(python3 problem.py input.txt)
+  ⎿  19386344315
+     34421651192
+
+● Bash(cd /home/steamvr/dev/aoc2025 && pyright day2/problem.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Part 2 answer: 34421651192. Let me submit:
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f93cfe221829f25e9ae4ac41fd4d7d518a46ca0f4336c2ed34
+      b0ca42be37f2367c2b6288a080c810a49e111971f0748688903174193dcb47d" -X POST
+      -d…)
+  ⎿  (No content)
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f93cfe221829f25e9ae4ac41fd4d7d518a46ca0f4336c2ed34
+      b0ca42be37f2367c2b6288a080c810a49e111971f0748688903174193dcb47d" -X POST
+      -d…)
+  ⎿  <!DOCTYPE html>                
+     <html lang="en-us">
+     <head>
+     … +150 lines (ctrl+o to expand)
+
+● Day 2 is complete (4 stars total shown). The answer was already accepted.
+  Let me mark everything complete:
+
+● Day 2 complete! Both answers accepted:
+  - Part 1: 19386344315 (sum of IDs with pattern repeated exactly twice)
+  - Part 2: 34421651192 (sum of IDs with pattern repeated at least twice)
+
+  Should I commit this solution?
+
+
+
