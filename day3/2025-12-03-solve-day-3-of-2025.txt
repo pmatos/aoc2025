@@ -1,0 +1,220 @@
+
+ ▐▛███▜▌   Claude Code v2.0.57
+▝▜█████▛▘  Opus 4.5 · Claude API
+  ▘▘ ▝▝    ~/dev/aoc2025/day3
+
+> Solve day 3 of 2025. 
+  ⎿  UserPromptSubmit hook error
+
+● I'll help you solve day 3 of Advent of Code 2025. Let me start by
+  exploring the current structure and fetching the problem description.
+
+● Search(pattern: "day3/**/*")
+  ⎿  Found 0 files 
+
+● Fetch(https://adventofcode.com/2025/day/3)
+  ⎿  Received 6.7KB (200 OK)
+
+● Read(~/dev/aoc2025/.env)
+  ⎿  Read 2 lines
+
+● Bash(mkdir -p /home/pmatos/dev/aoc2025/day3)
+  ⎿  (No content)
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿  (No content)
+
+● Read(input.txt)
+  ⎿  Read 201 lines
+
+● I have the input. Let me update the todo and implement the solution.
+
+● Write(problem.py)
+  ⎿  Wrote 49 lines to problem.py                                          
+     #!/usr/bin/env python3
+     import sys
+     from pathlib import Path
+     def max_joltage(bank: str) -> int:
+         """Find maximum two-digit number from bank where first digit comes 
+     before second."""
+         digits = [int(c) for c in bank]
+         n = len(digits)
+
+     … +39 lines (ctrl+o to expand)
+
+● Let me test with the example first:
+
+● Bash(cd /home/pmatos/dev/aoc2025/day3 && echo -e
+      "987654321111111\n811111111111119\n234234234234278\n818181911112111" |
+      python3 -c "
+      import sys…)
+  ⎿  987654321111111: 98          
+     811111111111119: 89
+     234234234234278: 78
+     … +2 lines (ctrl+o to expand)
+
+● The example matches (357). Now let me run on the actual input:
+
+● Bash(python3 problem.py input.txt)
+  ⎿  17524
+
+● Bash(pyright problem.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Fetch(https://adventofcode.com/2025/day/3)
+  ⎿  Received 6.7KB (200 OK)
+
+● Let me submit the Part 1 answer:
+
+● Bash(curl -s -X POST -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3" -d…)
+  ⎿ That's the right answer!  You are one gold star closer to decorating th
+    e North Pole. [Continue to Part Two]
+
+
+● Excellent! Part 1 is correct (17524). Now let me fetch Part 2:
+
+● Fetch(https://adventofcode.com/2025/day/3)
+  ⎿  Received 6.7KB (200 OK)
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿ <article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>The es
+    calator doesn't move. The Elf explains that it probably needs more jolt
+    age to overcome the <a href="https://en.wikipedia.org/wiki/Static_frict
+    … +79 lines (ctrl+o to expand)
+
+
+
+
+● Now I understand Part 2:
+  - Select exactly 12 batteries from each bank
+  - Form a 12-digit number (in left-to-right order)
+  - Maximize this number and sum all maximums
+
+● Read(problem.py)
+  ⎿  Read 49 lines
+
+● Update(problem.py)
+  ⎿  Updated problem.py with 30 additions                                
+       32        return total
+       33    
+       34    
+       35 +  def max_joltage_k(bank: str, k: int) -> int:
+       36 +      """Find maximum k-digit number by selecting k digits in 
+          + order."""
+       37 +      digits = [int(c) for c in bank]
+       38 +      n = len(digits)
+       39 +  
+       40 +      result = []
+       41 +      pos = 0
+       42 +      for remaining in range(k, 0, -1):
+       43 +          end = n - remaining + 1
+       44 +          max_digit = -1
+       45 +          max_pos = -1
+       46 +          for i in range(pos, end):
+       47 +              if digits[i] > max_digit:
+       48 +                  max_digit = digits[i]
+       49 +                  max_pos = i
+       50 +          result.append(max_digit)
+       51 +          pos = max_pos + 1
+       52 +  
+       53 +      return int(''.join(str(d) for d in result))
+       54 +  
+       55 +  
+       56 +  def solve_part2(lines: list[str]) -> int:
+       57 +      """Sum of maximum 12-digit joltage from each bank."""
+       58 +      total = 0
+       59 +      for line in lines:
+       60 +          if line.strip():
+       61 +              total += max_joltage_k(line.strip(), 12)
+       62 +      return total
+       63 +  
+       64 +  
+       65    def main() -> None:
+       66        if len(sys.argv) < 2:
+       67            print("Usage: python problem.py <input_file>")
+
+● Update(problem.py)
+  ⎿  Updated problem.py with 2 additions and 2 removals            
+       70        input_path = Path(sys.argv[1])
+       71        lines = input_path.read_text().strip().split('\n')
+       72    
+       73 -      result = solve_part1(lines)
+       74 -      print(result)
+       73 +      print(solve_part1(lines))
+       74 +      print(solve_part2(lines))
+       75    
+       76    
+       77    if __name__ == "__main__":
+
+● Let me test with the example:
+
+● Bash(echo -e
+      "987654321111111\n811111111111119\n234234234234278\n818181911112111" |
+      python3 -c "
+      import sys…)
+  ⎿  987654321111111: 987654321111
+     811111111111119: 811111111119
+     234234234234278: 434234234278
+     … +2 lines (ctrl+o to expand)
+
+● The example matches (3121910778619). Let me run on the actual input:
+
+● Bash(python3 problem.py input.txt)
+  ⎿  17524          
+     173848577117276
+
+● Bash(pyright problem.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Bash(curl -s -X POST -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3" -d…)
+  ⎿  (No content)
+
+● Bash(curl -s -X POST -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3" -d…)
+  ⎿ <article><p>You don't seem to be solving the right level.  Did you alre
+    ady complete it? <a href="/2025/day/3">[Return to Day 3]</a></p></artic
+    le>
+
+
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿ <header><div><h1 class="title-global"><a href="/">Advent of Code</a></h
+    1><nav><ul><li><a href="/2025/about">[About]</a></li><li><a href="/2025
+    /events">[Events]</a></li><li><a href="https://cottonbureau.com/people/
+    … +31 lines (ctrl+o to expand)
+
+
+
+
+● Both parts are complete! Let me update the todo list:
+
+● Day 3 is complete! Both parts solved correctly.
+
+  Part 1: Find maximum 2-digit joltage from each bank → 17524
+  Part 2: Find maximum 12-digit joltage from each bank → 173848577117276
+
+  The solution uses a greedy algorithm:
+  - For Part 1: For each position, compute digit * 10 + max_digit_to_right
+  and take the maximum
+  - For Part 2: Greedily select k digits - at each step, pick the maximum
+  digit that leaves enough room for remaining selections
+
+  The solution is in /home/pmatos/dev/aoc2025/day3/problem.py and passes
+  pyright type checking.
+
+
+
