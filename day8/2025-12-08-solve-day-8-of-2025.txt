@@ -1,0 +1,213 @@
+
+ ▐▛███▜▌   Claude Code v2.0.61
+▝▜█████▛▘  Opus 4.5 · Claude API
+  ▘▘ ▝▝    ~/dev/aoc2025
+
+> Solve day 8 of 2025. 
+
+● I'll solve Day 8 of Advent of Code 2025. Let me start by setting up the
+  directory and fetching the problem description.
+
+● Bash(mkdir -p /home/pmatos/dev/aoc2025/day8)
+  ⎿  (No content)
+
+● Fetch(https://adventofcode.com/2025/day/8)
+  ⎿  Received 7.5KB (200 OK)
+
+● Search(pattern: "day*/.env")
+  ⎿  Found 0 files 
+
+● Read(.env)
+  ⎿  Read 2 lines
+
+● Search(pattern: "day7/*.py")
+  ⎿  Found 1 file (ctrl+o to expand)
+
+● Read(day7/problem.py)
+  ⎿  Read 104 lines
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿  5370,32684,47416              
+     50576,36657,47067
+     81216,77932,88744
+     … +17 lines (ctrl+o to expand)
+
+● Bash(wc -l /home/pmatos/dev/aoc2025/day8/input.txt)
+  ⎿  1000 /home/pmatos/dev/aoc2025/day8/input.txt
+
+● Write(day8/problem.py)
+  ⎿  Wrote 100 lines to day8/problem.py                       
+     #!/usr/bin/env python3
+     import sys
+     from typing import TextIO
+     import math
+     import heapq
+     def parse_input(f: TextIO) -> list[tuple[int, int, int]]:
+         points: list[tuple[int, int, int]] = []
+         for line in f:
+     … +90 lines (ctrl+o to expand)
+
+● Bash(uv run pyright day8/problem.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Bash(uv run python day8/problem.py day8/input.txt)
+  ⎿  153328
+     0
+
+● Bash(curl -s -X POST -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3" -d…)
+  ⎿  <!DOCTYPE html>                
+     <html lang="en-us">
+     <head>
+     … +146 lines (ctrl+o to expand)
+
+● Part 1 is correct (153328). Let me fetch Part 2.
+
+● Fetch(https://adventofcode.com/2025/day/8)
+  ⎿  Received 7.5KB (200 OK)
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿ <article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>The El
+    ves were right; they <em>definitely</em> don't have enough extension ca
+    bles. You'll need to keep connecting junction boxes together until they
+    … +58 lines (ctrl+o to expand)
+
+
+
+
+● Read(day8/problem.py)
+  ⎿  Read 100 lines
+
+● Update(day8/problem.py)
+  ⎿  Updated day8/problem.py with 2 additions               
+       20            self.parent = list(range(n))
+       21            self.rank = [0] * n
+       22            self.size = [1] * n
+       23 +          self.num_components = n
+       24    
+       25        def find(self, x: int) -> int:
+       26            if self.parent[x] != x:
+     ...
+       36            self.size[px] += self.size[py]
+       37            if self.rank[px] == self.rank[py]:
+       38                self.rank[px] += 1
+       39 +          self.num_components -= 1
+       40            return True
+       41    
+       42        def get_component_sizes(self) -> list[int]:
+
+● Update(day8/problem.py)
+  ⎿  Updated day8/problem.py with 2 additions and 2 removals             
+       52        return (p1[0] - p2[0])**2 + (p1[1] - p2[1])**2 + (p1[2] 
+            - p2[2])**2
+       53    
+       54    
+       55 -  def get_k_smallest_pairs(points: list[tuple[int, int, int]]
+          -  , k: int) -> list[tuple[int, int, int]]:
+       55 +  def get_all_pairs_sorted(points: list[tuple[int, int, int]]
+          +  ) -> list[tuple[int, int, int]]:
+       56        n = len(points)
+       57        pairs: list[tuple[int, int, int]] = []
+       58        for i in range(n):
+     ...
+       60                dist_sq = euclidean_distance_sq(points[i], 
+            points[j])
+       61                pairs.append((dist_sq, i, j))
+       62        pairs.sort()
+       63 -      return pairs[:k]
+       63 +      return pairs
+       64    
+       65    
+       66    def part1(points: list[tuple[int, int, int]]) -> int:
+
+● Update(day8/problem.py)
+  ⎿  Updated day8/problem.py with 12 additions and 2 removals     
+       67        n = len(points)
+       68        uf = UnionFind(n)
+       69    
+       70 -      pairs = get_k_smallest_pairs(points, 1000)
+       70 +      pairs = get_all_pairs_sorted(points)
+       71    
+       72 -      for _, i, j in pairs:
+       72 +      for _, i, j in pairs[:1000]:
+       73            uf.union(i, j)
+       74    
+       75        sizes = uf.get_component_sizes()
+     ...
+       79    
+       80    
+       81    def part2(points: list[tuple[int, int, int]]) -> int:
+       82 +      n = len(points)
+       83 +      uf = UnionFind(n)
+       84 +  
+       85 +      pairs = get_all_pairs_sorted(points)
+       86 +  
+       87 +      for _, i, j in pairs:
+       88 +          if uf.union(i, j):
+       89 +              if uf.num_components == 1:
+       90 +                  return points[i][0] * points[j][0]
+       91 +  
+       92        return 0
+       93    
+       94    
+
+● Bash(uv run pyright day8/problem.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Bash(uv run python day8/problem.py day8/input.txt)
+  ⎿  153328    
+     6095621910
+
+● Bash(curl -s -X POST -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3" -d…)
+  ⎿ <article><p>That's the right answer!  You are <span class="day-success"
+    >one gold star</span> closer to decorating the North Pole.</p><p>You ha
+    ve completed Day 8! You can <span class="share">[Share<span class="shar
+    e-content">on
+
+
+
+
+● Read(day8/problem.py)
+  ⎿  Read 112 lines
+
+● Update(day8/problem.py)
+  ⎿  Updated day8/problem.py with 2 removals                         
+       1    #!/usr/bin/env python3
+       2    import sys
+       3    from typing import TextIO
+       4 -  import math
+       5 -  import heapq
+       4    
+       5    
+       6    def parse_input(f: TextIO) -> list[tuple[int, int, int]]:
+
+● Bash(uv run pyright day8/problem.py && uv run python day8/problem.py
+      day8/input.txt)
+  ⎿  0 errors, 0 warnings, 0 informations
+     153328
+     6095621910
+
+● Day 8 is complete.
+
+  Part 1: Connect the 1000 closest pairs of junction boxes and multiply the
+  sizes of the three largest circuits. Answer: 153328
+
+  Part 2: Continue connecting pairs until all boxes form a single circuit,
+  then multiply the X coordinates of the last two connected boxes. Answer:
+  6095621910
+
+  The solution uses a Union-Find (disjoint set) data structure to
+  efficiently track connected components as we process pairs of junction
+  boxes sorted by Euclidean distance.
+
+
+
