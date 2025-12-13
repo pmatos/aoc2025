@@ -1,0 +1,1050 @@
+
+ * ▐▛███▜▌ *   Claude Code v2.0.67
+* ▝▜█████▛▘ *  Opus 4.5 · Claude API
+ *  ▘▘ ▝▝  *   ~/dev/aoc2025
+
+> Solve day 11 of 2025. 
+
+● I'll solve Day 11 of Advent of Code 2025. Let me start by fetching the problem description and setting up the solution.
+
+● Fetch(https://adventofcode.com/2025/day/11)
+  ⎿  Received 6.8KB (200 OK)
+
+● Search(pattern: "day11/**/*")
+  ⎿  Found 0 files 
+
+● Read(.env)
+  ⎿  Read 2 lines
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿  ngx: mgt dpm fiq               
+     obs: din fhn tde
+     arj: zlz olw
+     … +641 lines (ctrl+o to expand)
+
+● Bash(mkdir -p /home/pmatos/dev/aoc2025/day11)
+  ⎿  (No content)
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿  (No content)
+
+● Write(day11/problem.py)
+  ⎿  Wrote 58 lines to day11/problem.py                     
+     #!/usr/bin/env python3
+     import sys
+     from collections import defaultdict
+     def parse_input(filename: str) -> dict[str, list[str]]:
+         graph: dict[str, list[str]] = defaultdict(list)
+         with open(filename) as f:
+             for line in f:
+                 line = line.strip()
+     … +48 lines (ctrl+o to expand)
+
+● Write(day11/test_example.txt)
+  ⎿  Wrote 11 lines to day11/test_example.txt
+     aaa: you hhh
+     you: bbb ccc
+     bbb: ddd eee
+     ccc: ddd eee fff
+     ddd: ggg
+     eee: out
+     fff: out
+     ggg: out
+     hhh: ccc fff iii
+     iii: out
+     … +1 line (ctrl+o to expand)
+
+● Bash(uv run python day11/problem.py day11/test_example.txt)
+  ⎿  5
+
+● The example works correctly. Let me run it on the actual input:
+
+● Bash(uv run python day11/problem.py day11/input.txt)
+  ⎿  649
+
+● Part 1 answer is 649. Let me submit this and get Part 2:
+
+● Bash(curl -s -X POST -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3" -d…)
+  ⎿ That's the right answer!  You are <span class="day-success">one gold st
+    ar</span> closer to decorating the North Pole. <a href="/2025/day/11#pa
+    rt2">[Continue to Part Two]</a>
+
+
+
+● Fetch(https://adventofcode.com/2025/day/11)
+  ⎿  Received 6.8KB (200 OK)
+
+● Bash(curl -s -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3"
+      https://ad…)
+  ⎿ --- Part Two ---Thanks in part to your analysis, the Elves have figured
+     out a little bit about the issue. They now know that the problematic d
+    ata path passes through both dac (a digital-to-analog converter) and ff
+    … +33 lines (ctrl+o to expand)
+
+
+
+
+● Read(day11/problem.py)
+  ⎿  Read 58 lines
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 24 additions                     
+       39        return count
+       40    
+       41    
+       42 +  def count_paths_with_required(
+       43 +      graph: dict[str, list[str]], start: str, end: str, 
+          + required: set[str]
+       44 +  ) -> int:
+       45 +      count = 0
+       46 +  
+       47 +      def dfs(node: str, visited: set[str]) -> None:
+       48 +          nonlocal count
+       49 +          if node == end:
+       50 +              if required.issubset(visited):
+       51 +                  count += 1
+       52 +              return
+       53 +          if node not in graph:
+       54 +              return
+       55 +          for neighbor in graph[node]:
+       56 +              if neighbor not in visited:
+       57 +                  visited.add(neighbor)
+       58 +                  dfs(neighbor, visited)
+       59 +                  visited.remove(neighbor)
+       60 +  
+       61 +      visited: set[str] = {start}
+       62 +      dfs(start, visited)
+       63 +      return count
+       64 +  
+       65 +  
+       66    def solve_part1(filename: str) -> int:
+       67        graph = parse_input(filename)
+       68        return count_paths(graph, "you", "out")
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 6 additions                         
+       68        return count_paths(graph, "you", "out")
+       69    
+       70    
+       71 +  def solve_part2(filename: str) -> int:
+       72 +      graph = parse_input(filename)
+       73 +      return count_paths_with_required(graph, "svr", "out", 
+          + {"dac", "fft"})
+       74 +  
+       75 +  
+       76    def main() -> None:
+       77        if len(sys.argv) != 2:
+       78            print("Usage: python problem.py <input_file>")
+     ...
+       75    
+       76        filename = sys.argv[1]
+       77        print(solve_part1(filename))
+       78 +      print(solve_part2(filename))
+       79    
+       80    
+       81    if __name__ == "__main__":
+
+● Let me create a test for Part 2 and run it:
+
+● Write(day11/test_example2.txt)
+  ⎿  Wrote 14 lines to day11/test_example2.txt
+     svr: aaa bbb
+     aaa: fft
+     fft: ccc
+     bbb: tty
+     tty: ccc
+     ccc: ddd eee
+     ddd: hub
+     hub: fff
+     eee: dac
+     dac: fff
+     … +4 lines (ctrl+o to expand)
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input, count_paths_with_required…)
+  ⎿  Part 2 example result: 2
+     Expected: 2
+
+● Bash(uv run python day11/problem.py day11/input.txt)
+  ⎿  Running in the background (↓ to manage)
+
+● Task Output b8efc43
+  ⎿  (No content)
+
+● The solution is too slow for the large input. Let me kill the process and optimize:
+
+● Kill Shell(Kill shell: b8efc43)
+  ⎿  Shell b8efc43 killed
+
+● I need to optimize the solution. Let me use a smarter approach with memoization:
+
+● Read(day11/problem.py)
+  ⎿  Read 88 lines
+
+● Let me analyze the graph size first:
+
+● Bash(wc -l day11/input.txt && head -5 day11/input.txt)
+  ⎿  635 day11/input.txt          
+     ngx: mgt dpm fiq
+     obs: din fhn tde
+     … +4 lines (ctrl+o to expand)
+
+● Let me try an optimized approach with early pruning and increased recursion limit:
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 39 additions and 10 removals          
+        1    #!/usr/bin/env python3
+        2    import sys
+        3    from collections import defaultdict
+        4 +  from functools import lru_cache
+        5    
+        6 +  sys.setrecursionlimit(10000)
+        7    
+        8 +  
+        9    def parse_input(filename: str) -> dict[str, list[str]]:
+       10        graph: dict[str, list[str]] = defaultdict(list)
+       11        with open(filename) as f:
+     ...
+       39        return count
+       40    
+       41    
+       42 +  def can_reach(graph: dict[str, list[str]], start: str, end: 
+          + str, excluded: set[str]) -> bool:
+       43 +      if start == end:
+       44 +          return True
+       45 +      visited: set[str] = set()
+       46 +      stack = [start]
+       47 +      while stack:
+       48 +          node = stack.pop()
+       49 +          if node == end:
+       50 +              return True
+       51 +          if node in visited or node in excluded:
+       52 +              continue
+       53 +          visited.add(node)
+       54 +          if node in graph:
+       55 +              stack.extend(graph[node])
+       56 +      return False
+       57 +  
+       58 +  
+       59    def count_paths_with_required(
+       60        graph: dict[str, list[str]], start: str, end: str, 
+            required: set[str]
+       61    ) -> int:
+       62 -      count = 0
+       62 +      req_list = list(required)
+       63    
+       64 -      def dfs(node: str, visited: set[str]) -> None:
+       65 -          nonlocal count
+       64 +      def dfs(node: str, visited: set[str], req_mask: int) -> 
+          +  int:
+       65            if node == end:
+       66 -              if required.issubset(visited):
+       67 -                  count += 1
+       68 -              return
+       66 +              return 1 if req_mask == (1 << len(req_list)) - 1
+          +  else 0
+       67            if node not in graph:
+       68 -              return
+       68 +              return 0
+       69 +  
+       70 +          total = 0
+       71            for neighbor in graph[node]:
+       72                if neighbor not in visited:
+       73 +                  new_mask = req_mask
+       74 +                  for i, req in enumerate(req_list):
+       75 +                      if neighbor == req:
+       76 +                          new_mask |= (1 << i)
+       77 +  
+       78                    visited.add(neighbor)
+       79 -                  dfs(neighbor, visited)
+       79 +                  total += dfs(neighbor, visited, new_mask)
+       80                    visited.remove(neighbor)
+       81 +          return total
+       82    
+       83 +      initial_mask = 0
+       84 +      for i, req in enumerate(req_list):
+       85 +          if start == req:
+       86 +              initial_mask |= (1 << i)
+       87 +  
+       88        visited: set[str] = {start}
+       89 -      dfs(start, visited)
+       90 -      return count
+       89 +      return dfs(start, visited, initial_mask)
+       90    
+       91    
+       92    def solve_part1(filename: str) -> int:
+
+● Let me verify the tests still pass and try the solution:
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input, count_paths,
+      count_paths_with_required…)
+  ⎿  Part 1 example: 5 (expected 5)
+     Part 2 example: 2 (expected 2)
+
+● Bash(timeout 30 uv run python -c "
+      from day11.problem import parse_input, count_paths_with_required…)
+  ⎿  Error: Exit code 124
+
+● I need a smarter approach with pruning. Let me add reachability checks to prune paths that can't reach required nodes:
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 27 additions and 1 removal            
+        59        return False
+        60    
+        61    
+        62 +  def compute_reachable_from(graph: dict[str, list[str]]) -> 
+           + dict[str, set[str]]:
+        63 +      reachable: dict[str, set[str]] = {}
+        64 +      for node in graph:
+        65 +          visited: set[str] = set()
+        66 +          stack = [node]
+        67 +          while stack:
+        68 +              n = stack.pop()
+        69 +              if n in visited:
+        70 +                  continue
+        71 +              visited.add(n)
+        72 +              if n in graph:
+        73 +                  stack.extend(graph[n])
+        74 +          reachable[node] = visited
+        75 +      return reachable
+        76 +  
+        77 +  
+        78    def count_paths_with_required(
+        79        graph: dict[str, list[str]], start: str, end: str, 
+             required: set[str]
+        80    ) -> int:
+        81 +      reachable = compute_reachable_from(graph)
+        82        req_list = list(required)
+        83 +      full_mask = (1 << len(req_list)) - 1
+        84    
+        85        def dfs(node: str, visited: set[str], req_mask: int) ->
+              int:
+        86            if node == end:
+        87 -              return 1 if req_mask == (1 
+           -  << len(req_list)) - 1 else 0
+        87 +              return 1 if req_mask == full_mask else 0
+        88            if node not in graph:
+        89                return 0
+        90    
+        91 +          if node in reachable:
+        92 +              node_reachable = reachable[node]
+        93 +              if end not in node_reachable:
+        94 +                  return 0
+        95 +              for i, req in enumerate(req_list):
+        96 +                  if not (req_mask & (1 << i)) and req not in
+           +  node_reachable:
+        97 +                      return 0
+        98 +  
+        99            total = 0
+       100            for neighbor in graph[node]:
+       101                if neighbor not in visited:
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input, count_paths,
+      count_paths_with_required…)
+  ⎿  Part 1 example: 5 (expected 5)
+     Part 2 example: 2 (expected 2)
+
+● Bash(timeout 60 uv run python -c "
+      from day11.problem import parse_input, count_paths_with_required…)
+  ⎿  Error: Exit code 124
+
+● Let me check if any paths exist from svr through both dac and fft to out:
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input, can_reach…)
+  ⎿  svr in graph: True           
+     svr can reach dac: True
+     svr can reach fft: True
+     … +5 lines (ctrl+o to expand)
+
+● Excellent! Key insight: dac cannot reach fft, so all valid paths must visit fft before dac. Let me optimize with this constraint:
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 51 additions                         
+        75        return reachable
+        76    
+        77    
+        78 +  def count_paths_fft_then_dac(
+        79 +      graph: dict[str, list[str]], start: str, end: str
+        80 +  ) -> int:
+        81 +      reachable = compute_reachable_from(graph)
+        82 +  
+        83 +      def dfs(node: str, visited: set[str], state: int) -> 
+           + int:
+        84 +          if node == end:
+        85 +              return 1 if state == 2 else 0
+        86 +          if node not in graph:
+        87 +              return 0
+        88 +  
+        89 +          if node in reachable:
+        90 +              node_reachable = reachable[node]
+        91 +              if end not in node_reachable:
+        92 +                  return 0
+        93 +              if state == 0 and "fft" not in node_reachable:
+        94 +                  return 0
+        95 +              if state < 2 and "dac" not in node_reachable:
+        96 +                  return 0
+        97 +  
+        98 +          total = 0
+        99 +          for neighbor in graph[node]:
+       100 +              if neighbor not in visited:
+       101 +                  new_state = state
+       102 +                  if neighbor == "fft":
+       103 +                      if state == 0:
+       104 +                          new_state = 1
+       105 +                  elif neighbor == "dac":
+       106 +                      if state == 0:
+       107 +                          continue
+       108 +                      elif state == 1:
+       109 +                          new_state = 2
+       110 +  
+       111 +                  visited.add(neighbor)
+       112 +                  total += dfs(neighbor, visited, new_state)
+       113 +                  visited.remove(neighbor)
+       114 +          return total
+       115 +  
+       116 +      initial_state = 0
+       117 +      if start == "fft":
+       118 +          initial_state = 1
+       119 +      elif start == "dac":
+       120 +          return 0
+       121 +  
+       122 +      visited: set[str] = {start}
+       123 +      return dfs(start, visited, initial_state)
+       124 +  
+       125 +  
+       126    def count_paths_with_required(
+       127        graph: dict[str, list[str]], start: str, end: str, 
+             required: set[str]
+       128    ) -> int:
+       129 +      if required == {"dac", "fft"}:
+       130 +          return count_paths_fft_then_dac(graph, start, end)
+       131 +  
+       132        reachable = compute_reachable_from(graph)
+       133        req_list = list(required)
+       134        full_mask = (1 << len(req_list)) - 1
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input, count_paths,
+      count_paths_with_required…)
+  ⎿  Part 2 example: 2 (expected 2)
+
+● Bash(timeout 120 uv run python -c "
+      from day11.problem import parse_input, count_paths_fft_then_dac…)
+  ⎿  Error: Exit code 124
+
+● Let me analyze the graph structure to find a better approach:
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input…)
+  ⎿  Total nodes: 635             
+     Min branching: 1
+     Max branching: 24
+     … +5 lines (ctrl+o to expand)
+
+> Feel free to set the timeout higher at 10 minutes if it helps. Otherwise 
+optimize performance until you find a solution. 
+
+● Let me try with a longer timeout (10 minutes):
+
+● Bash(timeout 600 uv run python -c " timeout: 10m 10s
+      import time…)
+  ⎿  Error: Exit code 124
+
+● The DFS is still too slow. Let me try a divide-and-conquer approach:
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input, count_paths…)
+  ⎿  Shortest svr->fft: 8         
+     Shortest fft->dac: 13
+     Shortest dac->out: 9
+     … +3 lines (ctrl+o to expand)
+
+● Let me try an iterative approach with better optimization:
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 1 addition and 2 removals       
+       1    #!/usr/bin/env python3
+       2    import sys
+       3    from collections import defaultdict
+       4 -  from functools import lru_cache
+       4    
+       5 -  sys.setrecursionlimit(10000)
+       5 +  sys.setrecursionlimit(50000)
+       6    
+       7    
+       8    def parse_input(filename: str) -> dict[str, list[str]]:
+
+● Read(day11/problem.py)
+  ⎿  Read 193 lines
+
+● Let me try optimizing with integer indices and running with PyPy:
+
+● Bash(which pypy3 || which pypy)
+  ⎿  pypy3 not found
+     /usr/bin/pypy
+
+● Write(day11/problem_fast.py)
+  ⎿  Wrote 143 lines to day11/problem_fast.py
+     #!/usr/bin/env python
+     import sys
+     sys.setrecursionlimit(50000)
+     def parse_input(filename):
+         name_to_idx = {}
+         graph = {}
+     … +133 lines (ctrl+o to expand)
+
+● Bash(uv run python day11/problem_fast.py day11/test_example.txt && echo "---"
+      && uv run python day11/problem_fast.py day11/test_example2.txt)
+  ⎿  5  
+     ---
+     2
+
+● Bash(timeout 600 /usr/bin/pypy day11/problem_fast.py            timeout: 10m 
+      day11/input.txt)                                            10s
+  ⎿  Error: Exit code 124
+
+● Let me analyze if there are bottleneck nodes:
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input…)
+  ⎿  svr neighbors: ['ciu', 'hdh', 'jmf']   
+     Number of nodes that can reach fft: 118
+     Number of nodes fft can reach: 432
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input…)
+  ⎿  No path found within limits
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input…)
+  ⎿  Running in the background (↓ to manage)
+
+● Task Output b382501
+  ⎿  (No content)
+
+● Kill Shell(Kill shell: b382501)
+  ⎿  Shell b382501 killed
+
+● Bash(timeout 30 uv run python -c "
+      from day11.problem import parse_input…)
+  ⎿ svr -> fft (avoiding dac): True                                        
+      Length: 9, path: ['svr', 'ciu', 'xhe', 'meb', 'rxj', 'igj', 'qjz', 'a
+    hg', 'fft']
+    … +6 lines (ctrl+o to expand)
+
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input…)
+  ⎿ Segment 1 (svr->fft): ['svr', 'ciu', 'xhe', 'meb', 'rxj', 'igj', 'qjz',
+     'ahg', 'fft']
+    Segment 2 (fft->dac): ['fft', 'gnf', 'cba', 'jyv', 'ine', 'nyv', 'tui',
+    … +12 lines (ctrl+o to expand)
+
+
+
+● Let me check if the graph is a DAG (which would make this much easier):
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input…)
+  ⎿  Has self-loop: False
+     Has cycle: False
+
+● Excellent! The graph is a DAG! This makes the problem much easier. Let me implement an efficient DP solution:
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 75 additions and 124 removals         
+       1    #!/usr/bin/env python3
+       2    import sys
+       3 -  from collections import defaultdict
+       3 +  from collections import defaultdict, deque
+       4 +  from functools import lru_cache
+       5    
+       6 -  sys.setrecursionlimit(50000)
+       6    
+       7 -  
+       7    def parse_input(filename: str) -> dict[str, list[str]]:
+       8        graph: dict[str, list[str]] = defaultdict(list)
+       9        with open(filename) as f:
+     ...
+        20        return graph
+        21    
+        22    
+        23 -  def count_paths(graph: dict[str, list[str]], start: str, 
+           - end: str) -> int:
+        24 -      count = 0
+        23 +  def topological_sort(graph: dict[str, list[str]]) -> 
+           + list[str]:
+        24 +      all_nodes: set[str] = set(graph.keys())
+        25 +      for neighbors in graph.values():
+        26 +          all_nodes.update(neighbors)
+        27    
+        28 -      def dfs(node: str, visited: set[str]) -> None:
+        29 -          nonlocal count
+        30 -          if node == end:
+        31 -              count += 1
+        32 -              return
+        33 -          if node not in graph:
+        34 -              return
+        35 -          for neighbor in graph[node]:
+        36 -              if neighbor not in visited:
+        37 -                  visited.add(neighbor)
+        38 -                  dfs(neighbor, visited)
+        39 -                  visited.remove(neighbor)
+        28 +      in_degree: dict[str, int] = {node: 0 for node in 
+           + all_nodes}
+        29 +      for neighbors in graph.values():
+        30 +          for neighbor in neighbors:
+        31 +              in_degree[neighbor] += 1
+        32    
+        33 -      visited: set[str] = {start}
+        34 -      dfs(start, visited)
+        35 -      return count
+        33 +      queue = deque([node for node in all_nodes if 
+           + in_degree[node] == 0])
+        34 +      result: list[str] = []
+        35    
+        36 +      while queue:
+        37 +          node = queue.popleft()
+        38 +          result.append(node)
+        39 +          for neighbor in graph.get(node, []):
+        40 +              in_degree[neighbor] -= 1
+        41 +              if in_degree[neighbor] == 0:
+        42 +                  queue.append(neighbor)
+        43    
+        44 -  def can_reach(graph: dict[str, list[str]], start: str, end:
+           -  str, excluded: set[str]) -> bool:
+        45 -      if start == end:
+        46 -          return True
+        47 -      visited: set[str] = set()
+        48 -      stack = [start]
+        49 -      while stack:
+        50 -          node = stack.pop()
+        51 -          if node == end:
+        52 -              return True
+        53 -          if node in visited or node in excluded:
+        54 -              continue
+        55 -          visited.add(node)
+        56 -          if node in graph:
+        57 -              stack.extend(graph[node])
+        58 -      return False
+        44 +      return result
+        45    
+        46    
+        47 -  def compute_reachable_from(graph: dict[str, list[str]]) -> 
+           - dict[str, set[str]]:
+        48 -      reachable: dict[str, set[str]] = {}
+        49 -      for node in graph:
+        50 -          visited: set[str] = set()
+        51 -          stack = [node]
+        52 -          while stack:
+        53 -              n = stack.pop()
+        54 -              if n in visited:
+        55 -                  continue
+        56 -              visited.add(n)
+        57 -              if n in graph:
+        58 -                  stack.extend(graph[n])
+        59 -          reachable[node] = visited
+        60 -      return reachable
+        47 +  def count_paths_dag(graph: dict[str, list[str]], start: 
+           + str, end: str) -> int:
+        48 +      topo_order = topological_sort(graph)
+        49 +      node_to_idx = {node: i for i, node in 
+           + enumerate(topo_order)}
+        50    
+        51 +      dp: dict[str, int] = defaultdict(int)
+        52 +      dp[end] = 1
+        53    
+        54 -  def count_paths_fft_then_dac(
+        55 -      graph: dict[str, list[str]], start: str, end: str
+        56 -  ) -> int:
+        57 -      reachable = compute_reachable_from(graph)
+        58 -  
+        59 -      def dfs(node: str, visited: set[str], state: int) -> 
+           - int:
+        54 +      for node in reversed(topo_order):
+        55            if node == end:
+        56 -              return 1 if state == 2 else 0
+        57 -          if node not in graph:
+        58 -              return 0
+        56 +              continue
+        57 +          for neighbor in graph.get(node, []):
+        58 +              dp[node] += dp[neighbor]
+        59    
+        60 -          if node in reachable:
+        61 -              node_reachable = reachable[node]
+        62 -              if end not in node_reachable:
+        63 -                  return 0
+        64 -              if state == 0 and "fft" not in node_reachable:
+        65 -                  return 0
+        66 -              if state < 2 and "dac" not in node_reachable:
+        67 -                  return 0
+        60 +      return dp[start]
+        61    
+        62 -          total = 0
+        63 -          for neighbor in graph[node]:
+        64 -              if neighbor not in visited:
+        65 -                  new_state = state
+        66 -                  if neighbor == "fft":
+        67 -                      if state == 0:
+        68 -                          new_state = 1
+        69 -                  elif neighbor == "dac":
+        70 -                      if state == 0:
+        71 -                          continue
+        72 -                      elif state == 1:
+        73 -                          new_state = 2
+        62    
+        63 -                  visited.add(neighbor)
+        64 -                  total += dfs(neighbor, visited, new_state)
+        65 -                  visited.remove(neighbor)
+        66 -          return total
+        67 -  
+        68 -      initial_state = 0
+        69 -      if start == "fft":
+        70 -          initial_state = 1
+        71 -      elif start == "dac":
+        72 -          return 0
+        73 -  
+        74 -      visited: set[str] = {start}
+        75 -      return dfs(start, visited, initial_state)
+        76 -  
+        77 -  
+        78 -  def count_paths_with_required(
+        63 +  def count_paths_with_required_dag(
+        64        graph: dict[str, list[str]], start: str, end: str, 
+             required: set[str]
+        65    ) -> int:
+        66 -      if required == {"dac", "fft"}:
+        67 -          return count_paths_fft_then_dac(graph, start, end)
+        68 -  
+        69 -      reachable = compute_reachable_from(graph)
+        66        req_list = list(required)
+        67 -      full_mask = (1 << len(req_list)) - 1
+        67 +      n_req = len(req_list)
+        68 +      full_mask = (1 << n_req) - 1
+        69    
+        70 -      def dfs(node: str, visited: set[str], req_mask: int) ->
+           -  int:
+        70 +      topo_order = topological_sort(graph)
+        71 +  
+        72 +      dp: dict[tuple[str, int], int] = defaultdict(int)
+        73 +      end_mask = 0
+        74 +      for i, req in enumerate(req_list):
+        75 +          if end == req:
+        76 +              end_mask |= (1 << i)
+        77 +      dp[(end, end_mask)] = 1
+        78 +  
+        79 +      for node in reversed(topo_order):
+        80            if node == end:
+        81 -              return 1 if req_mask == full_mask else 0
+        82 -          if node not in graph:
+        83 -              return 0
+        81 +              continue
+        82    
+        83 -          if node in reachable:
+        84 -              node_reachable = reachable[node]
+        85 -              if end not in node_reachable:
+        86 -                  return 0
+        87 -              for i, req in enumerate(req_list):
+        88 -                  if not (req_mask & (1 << i)) and req not in
+           -  node_reachable:
+        89 -                      return 0
+        83 +          node_mask = 0
+        84 +          for i, req in enumerate(req_list):
+        85 +              if node == req:
+        86 +                  node_mask |= (1 << i)
+        87    
+        88 -          total = 0
+        89 -          for neighbor in graph[node]:
+        90 -              if neighbor not in visited:
+        91 -                  new_mask = req_mask
+        88 +          for mask in range(full_mask + 1):
+        89 +              current_mask = mask | node_mask
+        90 +              for neighbor in graph.get(node, []):
+        91 +                  neighbor_mask = 0
+        92                    for i, req in enumerate(req_list):
+        93                        if neighbor == req:
+        94 -                          new_mask |= (1 << i)
+        94 +                          neighbor_mask |= (1 << i)
+        95 +                  next_mask = current_mask | neighbor_mask
+        96 +                  dp[(node, current_mask)] += dp[(neighbor, 
+           + next_mask)]
+        97    
+        98 -                  visited.add(neighbor)
+        99 -                  total += dfs(neighbor, visited, new_mask)
+       100 -                  visited.remove(neighbor)
+       101 -          return total
+       102 -  
+       103 -      initial_mask = 0
+        98 +      start_mask = 0
+        99        for i, req in enumerate(req_list):
+       100            if start == req:
+       101 -              initial_mask |= (1 << i)
+       101 +              start_mask |= (1 << i)
+       102    
+       103 -      visited: set[str] = {start}
+       104 -      return dfs(start, visited, initial_mask)
+       103 +      return dp[(start, start_mask)]
+       104    
+       105    
+       106 +  def can_reach(graph: dict[str, list[str]], start: str, end:
+           +  str, excluded: set[str]) -> bool:
+       107 +      if start == end:
+       108 +          return True
+       109 +      visited: set[str] = set()
+       110 +      stack = [start]
+       111 +      while stack:
+       112 +          node = stack.pop()
+       113 +          if node == end:
+       114 +              return True
+       115 +          if node in visited or node in excluded:
+       116 +              continue
+       117 +          visited.add(node)
+       118 +          if node in graph:
+       119 +              stack.extend(graph[node])
+       120 +      return False
+       121 +  
+       122 +  
+       123    def solve_part1(filename: str) -> int:
+       124        graph = parse_input(filename)
+       125        return count_paths(graph, "you", "out")
+
+● Read(day11/problem.py)
+  ⎿  Read 25 lines
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 2 additions and 2 removals
+       121    
+       122    def solve_part1(filename: str) -> int:
+       123        graph = parse_input(filename)
+       124 -      return count_paths(graph, "you", "out")
+       124 +      return count_paths_dag(graph, "you", "out")
+       125    
+       126    
+       127    def solve_part2(filename: str) -> int:
+       128        graph = parse_input(filename)
+       129 -      return count_paths_with_required
+           -  (graph, "svr", "out", {"dac", "fft"})
+       129 +      return count_paths_with_required_dag
+           +  (graph, "svr", "out", {"dac", "fft"})
+       130    
+       131    
+       132    def main() -> None:
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input, count_paths_dag,
+      count_paths_with_required_dag…)
+  ⎿  Part 1 example: 5 (expected 5)
+     Part 2 example: 2 (expected 2)
+
+● Now let me run on the actual input:
+
+● Bash(uv run python day11/problem.py day11/input.txt)
+  ⎿  649               
+     202620243954086280
+
+● Part 1 is still 649 (correct) and Part 2 is 202620243954086280. Let me submit Part 2:
+
+● Bash(curl -s -X POST -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093cb24294e3" -d…)
+  ⎿ That's not the right answer; your answer is too high.  If you're stuck,
+     make sure you're using the full input data; there are also some genera
+    l tips on the <a href="/2025/about">about page</a>, or you can ask for
+    … +3 lines (ctrl+o to expand)
+
+
+
+● The answer is too high. Let me debug the Part 2 logic:
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input, topological_sort…)
+  ⎿ Topological order: ['svr', 'aaa', 'bbb', 'fft', 'tty', 'ccc', 'ddd', 'e
+    ee', 'hub', 'dac', 'fff', 'ggg', 'hhh', 'out']
+    … +3 lines (ctrl+o to expand)
+
+
+● Let me rewrite the Part 2 DP with clearer semantics:
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 15 additions and 27 removals          
+       66        n_req = len(req_list)
+       67        full_mask = (1 << n_req) - 1
+       68    
+       69 +      def get_mask(node: str) -> int:
+       70 +          mask = 0
+       71 +          for i, req in enumerate(req_list):
+       72 +              if node == req:
+       73 +                  mask |= (1 << i)
+       74 +          return mask
+       75 +  
+       76        topo_order = topological_sort(graph)
+       77    
+       78        dp: dict[tuple[str, int], int] = defaultdict(int)
+       79 -      end_mask = 0
+       80 -      for i, req in enumerate(req_list):
+       81 -          if end == req:
+       82 -              end_mask |= (1 << i)
+       83 -      dp[(end, end_mask)] = 1
+       79 +      dp[(start, get_mask(start))] = 1
+       80    
+       81 -      for node in reversed(topo_order):
+       82 -          if node == end:
+       83 -              continue
+       84 -  
+       85 -          node_mask = 0
+       86 -          for i, req in enumerate(req_list):
+       87 -              if node == req:
+       88 -                  node_mask |= (1 << i)
+       89 -  
+       81 +      for node in topo_order:
+       82            for mask in range(full_mask + 1):
+       83 -              current_mask = mask | node_mask
+       83 +              if dp[(node, mask)] == 0:
+       84 +                  continue
+       85 +  
+       86                for neighbor in graph.get(node, []):
+       87 -                  neighbor_mask = 0
+       88 -                  for i, req in enumerate(req_list):
+       89 -                      if neighbor == req:
+       90 -                          neighbor_mask |= (1 << i)
+       91 -                  next_mask = current_mask | neighbor_mask
+       92 -                  dp[(node, current_mask)] += dp[(neighbor, 
+          - next_mask)]
+       87 +                  new_mask = mask | get_mask(neighbor)
+       88 +                  dp[(neighbor, new_mask)] += dp[(node, mask)]
+       89    
+       90 -      start_mask = 0
+       91 -      for i, req in enumerate(req_list):
+       92 -          if start == req:
+       93 -              start_mask |= (1 << i)
+       90 +      return dp[(end, full_mask)]
+       91    
+       92 -      return dp[(start, start_mask)]
+       92    
+       93 -  
+       93    def can_reach(graph: dict[str, list[str]], start: str, end: 
+            str, excluded: set[str]) -> bool:
+       94        if start == end:
+       95            return True
+
+● Bash(uv run python -c "
+      from day11.problem import parse_input, count_paths_dag,
+      count_paths_with_required_dag…)
+  ⎿  Part 1 example: 5 (expected 5)
+     Part 2 example: 2 (expected 2)
+
+● Bash(uv run python day11/problem.py day11/input.txt)
+  ⎿  649            
+     458948453421420
+
+● Part 2 answer is now 458948453421420. Let me submit it:
+
+● Bash(sleep 60 && curl -s -X POST -b
+      "session=53616c7465645f5f2bb318ca2c5319c8e0a24a9fa1b5937dd513b7a2ed053f34b
+      18a78cd0f757c33cb45cda3e441dd35525418f4584ced4d32b1093c…)
+  ⎿ That's the right answer!  You are <span class="day-success">one gold st
+    ar</span> closer to decorating the North Pole.
+
+
+● Both parts solved! Now let me run pyright and clean up:
+
+● Bash(uv run pyright day11/problem.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Let me clean up unused code and files:
+
+● Read(day11/problem.py)
+  ⎿  Read 132 lines
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 1 removal                       
+       1    #!/usr/bin/env python3
+       2    import sys
+       3    from collections import defaultdict, deque
+       4 -  from functools import lru_cache
+       4    
+       5    
+       6    def parse_input(filename: str) -> dict[str, list[str]]:
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 2 removals                            
+       44    
+       45    def count_paths_dag(graph: dict[str, list[str]], start: str,
+             end: str) -> int:
+       46        topo_order = topological_sort(graph)
+       47 -      node_to_idx = {node: i for i, node in 
+          - enumerate(topo_order)}
+       48 -  
+       47        dp: dict[str, int] = defaultdict(int)
+       48        dp[end] = 1
+       49    
+
+● Update(day11/problem.py)
+  ⎿  Updated day11/problem.py with 17 removals                           
+        87        return dp[(end, full_mask)]
+        88    
+        89    
+        90 -  def can_reach(graph: dict[str, list[str]], start: str, end:
+           -  str, excluded: set[str]) -> bool:
+        91 -      if start == end:
+        92 -          return True
+        93 -      visited: set[str] = set()
+        94 -      stack = [start]
+        95 -      while stack:
+        96 -          node = stack.pop()
+        97 -          if node == end:
+        98 -              return True
+        99 -          if node in visited or node in excluded:
+       100 -              continue
+       101 -          visited.add(node)
+       102 -          if node in graph:
+       103 -              stack.extend(graph[node])
+       104 -      return False
+       105 -  
+       106 -  
+        90    def solve_part1(filename: str) -> int:
+        91        graph = parse_input(filename)
+        92        return count_paths_dag(graph, "you", "out")
+
+● Bash(uv run pyright day11/problem.py && rm -f day11/test_example.txt
+      day11/test_example2.txt day11/problem_fast.py)
+  ⎿  0 errors, 0 warnings, 0 informations
+
+● Bash(uv run python day11/problem.py day11/input.txt)
+  ⎿  649            
+     458948453421420
+
+● Day 11 solved successfully!
+
+  Summary
+
+  Part 1: Count all paths from you to out in the graph.
+  - Answer: 649
+
+  Part 2: Count paths from svr to out that visit both dac and fft.
+  - Answer: 458948453421420
+
+  Key Insights
+
+  1. The graph is a DAG (Directed Acyclic Graph) - this was the crucial realization that made the problem tractable. Initially I tried DFS with visited tracking, which was too slow due to the exponential number of paths.
+  2. DAG DP approach:
+    - Part 1: Simple backward DP - compute dp[node] = number of paths from node to out using reverse topological order
+    - Part 2: Forward DP with state tracking - dp[(node, mask)] = number of paths from start to node where mask indicates which required nodes (dac, fft) have been visited
+
+  The final solution runs in O(n * 2^k) time where n is the number of nodes and k is the number of required nodes (2 in Part 2).
+
+
+
